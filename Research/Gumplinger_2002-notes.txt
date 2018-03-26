@@ -1,0 +1,21 @@
+P. Gumplinger. Optical Photon Processes in Geant4. Users Workshop at SLAC (slides); Feb 2002.
+
+- G4OpticalPhoton data type
+  - No smooth physics transition to G4Gamma. 
+  - Can define spin vector class attribute (code on slide 2)
+- Native Geant4 optical photon features
+  - Automatic cerenkov and scintillation production
+  - Refraction and reflection processes
+  - Bulk absorption
+  - Rayleigh scattering
+- Enabling optical features
+  - Must define material absorption and relfection in G4DetectorConstruction
+  - Given as discrete list in terms of energies (code on slide 4)
+- Cerenkov Processes
+  - Occurs when v_particle > v_group of light in medium
+  - Photons emitted off surface of cone
+  - Decreased particle speed results in
+    - Decreased cone angle
+    - Decreased photon count
+    - Increased photon energy
+  - Photon spin vector normal to cone surface

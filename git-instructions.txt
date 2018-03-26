@@ -1,0 +1,4 @@
+# When backing up to GitHub:
+git add -A .
+git commit -am 'Enter message here (do not use quotes)'
+git push -u origin master

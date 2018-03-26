@@ -1,0 +1,41 @@
+IceCube Geant4 Simulation
+
+IceCube/
+  compile.sh
+    Bash script to reconstruct the program from scratch.
+
+  CMakeLists.txt
+    Parameter file for CMake, used to direct files for gnumake to compile the C++.
+
+  README.md
+    Project documentation; markdown optional.
+
+  IceCube.cc
+    The main sequence for the C++ program. It begins with an influx of command definitions via Geant4 libraries.  Arguments following the program name in the command line are interpreted, with a syntax guide printed if invoked in error.  Libraries are loaded for randomization algorithms, an event-to-process threading manager, a detector geometry evaluation, the physics list used, "action" sequences, and user interface whether command line or graphical (settings and macros for graphical and non-graphical usage are stored in the scripts/ folder).  Non-graphical usage involves defining the primary particle, its energy, and executing a run command for some number of events.
+
+  src/XXX.cc && include/XXX.hh
+    The "class" and "header" files which combined describe a set of functions; the latter contain declarations and intrinsic attributes (values) from the Geant4 libraries, the former contains explicit definitions for the functions. Most changes to the code will take place in the class files, using the "User Action" paradigm as used in most Geant4 examples and templates.
+
+    ActionInitialization.cc
+      Describes the action, or routine, of the Geant4 app.  The instance is fed a detector geometry and returns the initializations below, all of which user customization enabled.  The paradigm is as follows: Each 'run' contains a set of N 'events', in which a 'primary' particle begins a cascade governed by a 'physicslist', producing branches of secondary, tertiary, etc. collisions within time-ordered 'steps'.
+
+    DetectorConstruction.cc
+      Characterizes the geometry of the detectors and supporting setup; "detectors" is a loose word here as anything in a simulation can give an output if you tell it. Materials are defined either from the database or explicitly using thermodynamic constants.  Objects are constructed from solids, logical volumes, and physical volumes; solids describe the geometric shape and size, logical volumes manifest a certain material into a solid, and physical volumes are the actual placement of the object into a certain position and orientation in simulation-space. Visbility and color attributes are enabled for visual runtimes.  Here I've defined a km^3 ice box within a doubly-large world (to be perfectly fair the "world" volume is redundant, but at least makes problems conceptually cleaner).
+
+    RunAction.cc
+      The collection of N events which are processed for a single detector geometry.  User commands are processed in the "BeginOfRunAction" and "EndOfRunAction" functions.
+
+    EventAction.cc
+      A single cascade from an incident primary particle. User commands are processed in the "BeginOfEventAction" and "EndOfEventAction" functions.
+
+    PrimaryGeneratorAction.cc
+      Instantiates the primary particle of the cascade, the source term. The action contains and initialization function and a "GeneratePrimaries" function which is run at the beginning of each event. The position and direction of the source is fully configurable; as an initial setting, the particle is located above the IceCube detector, and incident downward.
+
+    PhysicsList.cc
+      Enlists the set of interactions, cross-sections, cascades, and other properties of particles across the energy spectrum via supergroups of physics models. Specific definitions of interaction algorithms will go here, though generally applications can get by with a good enough native physics list.
+
+    SteppingAction.cc
+      Collisions processed chronologically contribute to the cascade as a series of steps. Commands within "UserSteppingAction" are executed immediately following all energetic computation. Most tallies and other data output are provided via identifying functions in this routine.
+
+  build/
+    Ideally, the output directory of a working simulation program. Congratulations!
